@@ -1,5 +1,8 @@
 package com.sun.xiaotian.nioChatRoom;
 
+import com.sun.xiaotian.nioChatRoom.message.Message;
+import com.sun.xiaotian.nioChatRoom.message.TextMessage;
+import com.sun.xiaotian.nioChatRoom.util.MessageParse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,6 +10,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -23,7 +27,6 @@ public class Client implements Runnable {
     public Client(String host, int port) {
         this.host = host;
         this.port = port;
-        logger.info("init clint:\t" + id);
     }
 
 
@@ -31,18 +34,23 @@ public class Client implements Runnable {
 
     public void run() {
         Random random = new Random(37);
-        ByteBuffer writeBuffer = ByteBuffer.allocate(32);
+        ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
         try {
             while (true) {
                 SocketChannel clientSocket = SocketChannel.open();
                 clientSocket.connect(new InetSocketAddress(host, port));
+
                 while (!clientSocket.finishConnect()) {
                     TimeUnit.MICROSECONDS.sleep(100);
                 }
-                writeBuffer.putInt(random.nextInt());
+
+                TextMessage message = new TextMessage(id, new Date(), null, random.nextInt() + "");
+                byte[] messageBytes = MessageParse.toJson(message).getBytes();
+                writeBuffer.put(messageBytes, 0, messageBytes.length);
                 writeBuffer.flip();
                 clientSocket.write(writeBuffer);
                 writeBuffer.clear();
+
                 TimeUnit.MICROSECONDS.sleep(random.nextInt(Math.abs(5000)));
                 clientSocket.close();
             }
