@@ -1,10 +1,20 @@
 package com.sun.xiaotian.nioChatRoom.message;
 
-import com.alibaba.fastjson.annotation.JSONType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.util.Date;
 
-
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
+        property = "className"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = TextMessage.class, name = "TextMessage")
+})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Message {
 
     private long clientId;
@@ -12,6 +22,10 @@ public abstract class Message {
     private Date sendTime;
 
     private Date acceptTime;
+
+    public Message() {
+
+    }
 
     public Message(long clientId, Date sendTime, Date acceptTime) {
         this.clientId = clientId;

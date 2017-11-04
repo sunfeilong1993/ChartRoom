@@ -6,6 +6,13 @@ public class TextMessage extends Message {
 
     private String data;
 
+    /**
+     * 没有默认构造函数反序列化会失败
+     */
+    public TextMessage() {
+        super();
+    }
+
     public TextMessage(long clientId, Date sendTime, Date acceptTime, String data) {
         super(clientId, sendTime, acceptTime);
         this.data = data;
