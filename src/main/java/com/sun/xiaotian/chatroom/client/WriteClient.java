@@ -1,9 +1,8 @@
 package com.sun.xiaotian.chatroom.client;
 
 import com.sun.xiaotian.chatroom.TypeInfo;
-import com.sun.xiaotian.chatroom.message.Message;
 import com.sun.xiaotian.chatroom.message.TextMessage;
-import com.sun.xiaotian.chatroom.util.MessageParse;
+import com.sun.xiaotian.chatroom.util.JsonMessageParse;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -48,7 +47,7 @@ public class WriteClient extends Client {
         channel.write(writeBuffer);
         writeBuffer.clear();
         TextMessage message = new TextMessage(id, new Date(), null, random.nextInt() + context);
-        byte[] messageBytes = MessageParse.toJson(message).getBytes();
+        byte[] messageBytes = JsonMessageParse.writeToJson(message).getBytes();
         writeBuffer = ByteBuffer.allocate(messageBytes.length);
         writeBuffer.put(messageBytes, 0, messageBytes.length);
         writeBuffer.flip();

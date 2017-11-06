@@ -4,8 +4,7 @@ import com.sun.xiaotian.chatroom.exception.ChatRoomException;
 import com.sun.xiaotian.chatroom.message.Message;
 import com.sun.xiaotian.chatroom.storage.DataStorage;
 import com.sun.xiaotian.chatroom.storage.MemoryDataStorage;
-import com.sun.xiaotian.chatroom.util.MessageParse;
-import jdk.nashorn.internal.parser.DateParser;
+import com.sun.xiaotian.chatroom.util.JsonMessageParse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +67,7 @@ public class Server extends Thread {
                             Message tempMessage = null;
                             while (index < dataStorage.messageCount()) {
                                 tempMessage = dataStorage.getByIndex(index);
-                                String tempMessageJsonStr = MessageParse.toJson(tempMessage);
+                                String tempMessageJsonStr = JsonMessageParse.writeToJson(tempMessage);
                                 int strBytes = tempMessageJsonStr.getBytes().length;
                                 ByteBuffer writeBuffer = ByteBuffer.allocate(4 + strBytes);
                                 writeBuffer.putInt(strBytes);
@@ -87,7 +86,7 @@ public class Server extends Thread {
                             readLength = acceptSocket.read(readBuffer);
                         }
                         readBuffer.flip();
-                        Message message = MessageParse.parseFromJson(new String(readBuffer.array(), 0, readBuffer.limit()));
+                        Message message = JsonMessageParse.readFromJson(new String(readBuffer.array(), 0, readBuffer.limit()));
                         message.setAcceptTime(new Date());
                         dataStorage.add(message);
                         logger.info(message.toString());

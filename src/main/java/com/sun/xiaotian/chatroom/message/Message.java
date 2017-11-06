@@ -65,4 +65,24 @@ public abstract class Message {
                 ", acceptTime=" + acceptTime +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Message message = (Message) o;
+
+        if (clientId != message.clientId) return false;
+        if (sendTime != null ? !sendTime.equals(message.sendTime) : message.sendTime != null) return false;
+        return acceptTime != null ? acceptTime.equals(message.acceptTime) : message.acceptTime == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (clientId ^ (clientId >>> 32));
+        result = 31 * result + (sendTime != null ? sendTime.hashCode() : 0);
+        result = 31 * result + (acceptTime != null ? acceptTime.hashCode() : 0);
+        return result;
+    }
 }
