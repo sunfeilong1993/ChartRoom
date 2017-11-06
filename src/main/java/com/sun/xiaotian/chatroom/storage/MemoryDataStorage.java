@@ -1,6 +1,6 @@
 package com.sun.xiaotian.chatroom.storage;
 
-import com.sun.xiaotian.chatroom.exception.ChatRomException;
+import com.sun.xiaotian.chatroom.exception.ChatRoomException;
 import com.sun.xiaotian.chatroom.message.Message;
 
 import java.util.Collections;
@@ -22,9 +22,21 @@ public class MemoryDataStorage implements DataStorage {
 
     public List<Message> getMessages(int start, int end) {
         if (start < 0 || end > allMessages.size()) {
-            throw new ChatRomException("获取消息失败，请确认范围是否正确！");
+            throw new ChatRoomException("获取消息失败，请确认范围是否正确！");
         }
         return allMessages.subList(start, end);
+    }
+
+    @Override
+    public Message getByIndex(int index) {
+        if (!hasMessage()) {
+            return null;
+        }
+        if (index > allMessages.size() || index < 0) {
+            return null;
+        }
+
+        return allMessages.get(index);
     }
 
     public List<Message> getAll() {
@@ -33,5 +45,10 @@ public class MemoryDataStorage implements DataStorage {
 
     public int messageCount() {
         return allMessages.size();
+    }
+
+    @Override
+    public boolean hasMessage() {
+        return allMessages.size() > 0;
     }
 }

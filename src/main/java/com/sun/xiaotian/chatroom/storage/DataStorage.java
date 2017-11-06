@@ -26,6 +26,12 @@ public interface DataStorage {
     public List<Message> getMessages(int start, int end);
 
     /**
+     * 根据Id获取消息，从0开始
+     * @return
+     */
+    public Message getByIndex(int index);
+
+    /**
      * 获取全部消息
      * @return
      */
@@ -36,4 +42,10 @@ public interface DataStorage {
      * @return
      */
     public int messageCount();
+
+    /**
+     * 是否已经有消息
+     * @return
+     */
+    public boolean hasMessage();
 }

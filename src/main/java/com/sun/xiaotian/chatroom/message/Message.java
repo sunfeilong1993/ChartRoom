@@ -9,10 +9,10 @@ import java.util.Date;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
-        property = "className"
+        property = "messageType"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = TextMessage.class, name = "TextMessage")
+        @JsonSubTypes.Type(value = TextMessage.class, name = "text")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Message {
