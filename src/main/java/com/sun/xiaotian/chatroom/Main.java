@@ -1,4 +1,4 @@
-package com.sun.xiaotian.nioChatRoom;
+package com.sun.xiaotian.chatroom;
 
 public class Main {
 

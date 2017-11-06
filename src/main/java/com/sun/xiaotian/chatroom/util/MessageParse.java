@@ -1,9 +1,9 @@
-package com.sun.xiaotian.nioChatRoom.util;
+package com.sun.xiaotian.chatroom.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.sun.xiaotian.nioChatRoom.message.Message;
-import com.sun.xiaotian.nioChatRoom.message.TextMessage;
+import com.sun.xiaotian.chatroom.message.Message;
+import com.sun.xiaotian.chatroom.message.TextMessage;
 
 public class MessageParse {
 

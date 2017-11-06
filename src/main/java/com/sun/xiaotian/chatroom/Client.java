@@ -1,8 +1,7 @@
-package com.sun.xiaotian.nioChatRoom;
+package com.sun.xiaotian.chatroom;
 
-import com.sun.xiaotian.nioChatRoom.message.Message;
-import com.sun.xiaotian.nioChatRoom.message.TextMessage;
-import com.sun.xiaotian.nioChatRoom.util.MessageParse;
+import com.sun.xiaotian.chatroom.message.TextMessage;
+import com.sun.xiaotian.chatroom.util.MessageParse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +50,7 @@ public class Client implements Runnable {
                 clientSocket.write(writeBuffer);
                 writeBuffer.clear();
 
-                TimeUnit.MICROSECONDS.sleep(random.nextInt(Math.abs(5000)));
+                TimeUnit.SECONDS.sleep(random.nextInt(Math.abs(10)));
                 clientSocket.close();
             }
         } catch (IOException e) {

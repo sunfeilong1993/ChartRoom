@@ -1,9 +1,9 @@
-package com.sun.xiaotian.nioChatRoom;
+package com.sun.xiaotian.chatroom;
 
-import com.sun.xiaotian.nioChatRoom.message.Message;
-import com.sun.xiaotian.nioChatRoom.storage.DataStorage;
-import com.sun.xiaotian.nioChatRoom.storage.MemoryDataStorage;
-import com.sun.xiaotian.nioChatRoom.util.MessageParse;
+import com.sun.xiaotian.chatroom.message.Message;
+import com.sun.xiaotian.chatroom.storage.DataStorage;
+import com.sun.xiaotian.chatroom.storage.MemoryDataStorage;
+import com.sun.xiaotian.chatroom.util.MessageParse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

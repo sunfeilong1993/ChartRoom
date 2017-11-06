@@ -1,4 +1,4 @@
-package com.sun.xiaotian.nioChatRoom.message;
+package com.sun.xiaotian.chatroom.message;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;

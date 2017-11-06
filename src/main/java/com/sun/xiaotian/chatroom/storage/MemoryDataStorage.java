@@ -1,7 +1,7 @@
-package com.sun.xiaotian.nioChatRoom.storage;
+package com.sun.xiaotian.chatroom.storage;
 
-import com.sun.xiaotian.nioChatRoom.exception.ChatRomException;
-import com.sun.xiaotian.nioChatRoom.message.Message;
+import com.sun.xiaotian.chatroom.exception.ChatRomException;
+import com.sun.xiaotian.chatroom.message.Message;
 
 import java.util.Collections;
 import java.util.LinkedList;

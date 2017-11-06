@@ -1,4 +1,4 @@
-package com.sun.xiaotian.nioChatRoom.exception;
+package com.sun.xiaotian.chatroom.exception;
 
 public class ChatRomException extends RuntimeException {
 

@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.sun.xiaotian</groupId>
-    <artifactId>nio-chat-room</artifactId>
+    <artifactId>chatroom</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <jackson.version>2.9.0</jackson.version>
-        <java-version>1.8</java-version>
+        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
