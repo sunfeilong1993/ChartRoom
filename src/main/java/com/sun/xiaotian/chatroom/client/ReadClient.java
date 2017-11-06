@@ -1,17 +1,26 @@
 package com.sun.xiaotian.chatroom.client;
 
 import com.sun.xiaotian.chatroom.TypeInfo;
+import com.sun.xiaotian.chatroom.data.ChannelDataReader;
+import com.sun.xiaotian.chatroom.data.ChannelDataWriter;
+import com.sun.xiaotian.chatroom.data.ClientSendData;
+import com.sun.xiaotian.chatroom.data.ServerSendData;
+import com.sun.xiaotian.chatroom.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
+import java.nio.channels.Channel;
 import java.nio.channels.SocketChannel;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class ReadClient extends Client {
+
+    private ChannelDataReader channelDataReader = new ChannelDataReader();
+    private ChannelDataWriter channelDataWriter = new ChannelDataWriter();
 
     private final static Logger logger = LoggerFactory.getLogger(ReadClient.class);
 
@@ -31,8 +40,11 @@ public class ReadClient extends Client {
                 while (!clientSocket.finishConnect()) {
                     TimeUnit.MICROSECONDS.sleep(100);
                 }
+
+                writeClientInfo(clientSocket);
                 readMessage(clientSocket);
-                TimeUnit.SECONDS.sleep(random.nextInt(10));
+                TimeUnit.SECONDS.sleep(random.nextInt(3));
+                clientSocket.close();
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -41,43 +53,21 @@ public class ReadClient extends Client {
         }
     }
 
-    public void readMessage(SocketChannel channel) throws IOException, InterruptedException {
-        //发送消息
-        ByteBuffer writeBuffer = ByteBuffer.allocate(32);
-        //客户端类型
-        writeBuffer.putInt(TypeInfo.CLIENT_READ);
-        writeBuffer.flip();
-        channel.write(writeBuffer);
-        writeBuffer.clear();
+    private void writeClientInfo(SocketChannel channel) {
+        ClientSendData clientSendData = new ClientSendData();
+        clientSendData.setClientId(id);
+        clientSendData.setClientType(TypeInfo.CLIENT_READ);
+        clientSendData.setMessageSize(-1);
+        channelDataWriter.writeToClientSocket(channel, clientSendData);
+    }
 
-        //客户端ID
-        writeBuffer = ByteBuffer.allocate(64);
-        writeBuffer.putLong(id);
-        writeBuffer.flip();
-        channel.write(writeBuffer);
-        writeBuffer.clear();
-
-        while (true){
-            ByteBuffer readBuffer = ByteBuffer.allocate(4);
-            int length = 0;
-            while (readBuffer.position() < 4) {
-                length = channel.read(readBuffer);
-                if (length <= -1) {
-                    return;
-                }
-            }
-            readBuffer.flip();
-            int size = readBuffer.getInt();
-
-            readBuffer = ByteBuffer.allocate(size);
-            while (readBuffer.position() < size) {
-                length = channel.read(readBuffer);
-                if (length == -1) {
-                    return;
-                }
-            }
-            readBuffer.flip();
-            System.out.println(new String(readBuffer.array()));
+    private void readMessage(SocketChannel channel) throws IOException, InterruptedException {
+        ServerSendData serverSendData = channelDataReader.readFromServerSocket(channel);
+        List<Message> messages = serverSendData.getMessages();
+        if (messages != null) {
+            messages.forEach(message -> {
+                System.out.println(message.toString());
+            });
         }
     }
 }

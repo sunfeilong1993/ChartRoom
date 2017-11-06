@@ -1,6 +1,5 @@
 package com.sun.xiaotian.chatroom.util;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.sun.xiaotian.chatroom.message.Message;
 import com.sun.xiaotian.chatroom.message.TextMessage;
 import org.junit.Before;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class MessageParseTest {
 
