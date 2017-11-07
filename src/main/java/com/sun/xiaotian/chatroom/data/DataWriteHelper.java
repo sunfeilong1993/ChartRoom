@@ -38,7 +38,7 @@ public class DataWriteHelper {
         int messageLength = messageStr.getBytes().length;
         writeBuffer = ByteBuffer.allocate(DataConstant.INT_BUFFER_SIZE + messageLength);
         writeBuffer.putInt(messageLength);
-        writeBuffer.put(messageStr.getBytes(), 0, messageStr.getBytes().length);
+        writeBuffer.put(messageStr.getBytes());
         writeBuffer.flip();
         channel.write(writeBuffer);
         while (writeBuffer.position() < writeBuffer.limit()) {

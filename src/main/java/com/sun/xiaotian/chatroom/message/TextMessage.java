@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class TextMessage extends Message {
 
+    public static final TextMessage NULL = new TextMessage();
+
     private String data;
 
     /**
@@ -33,4 +35,5 @@ public class TextMessage extends Message {
     public void setData(String data) {
         this.data = data;
     }
+
 }

@@ -1,14 +1,11 @@
 package com.sun.xiaotian.chatroom.data;
 
-import com.sun.xiaotian.chatroom.Server;
 import com.sun.xiaotian.chatroom.exception.ChatRoomException;
 import com.sun.xiaotian.chatroom.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.Channel;
 import java.nio.channels.SocketChannel;
 
 public class ChannelDataReader {
@@ -20,7 +17,7 @@ public class ChannelDataReader {
         ClientSendData clientSendData = new ClientSendData();
         try {
             int clientType = dataReadHelper.readInt(channel);
-            if (clientType == Integer.MIN_VALUE) {
+            if (clientType == -1) {
                 logger.info("No Data ...");
                 return clientSendData;
             }

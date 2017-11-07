@@ -6,12 +6,12 @@ import com.sun.xiaotian.chatroom.data.ChannelDataWriter;
 import com.sun.xiaotian.chatroom.data.ClientSendData;
 import com.sun.xiaotian.chatroom.data.ServerSendData;
 import com.sun.xiaotian.chatroom.message.Message;
+import com.sun.xiaotian.chatroom.message.TextMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.channels.Channel;
 import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.Random;
@@ -57,7 +57,7 @@ public class ReadClient extends Client {
         ClientSendData clientSendData = new ClientSendData();
         clientSendData.setClientId(id);
         clientSendData.setClientType(TypeInfo.CLIENT_READ);
-        clientSendData.setMessageSize(-1);
+        clientSendData.setMessage(TextMessage.NULL);
         channelDataWriter.writeToClientSocket(channel, clientSendData);
     }
 

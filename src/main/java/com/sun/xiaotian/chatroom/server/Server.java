@@ -1,5 +1,7 @@
-package com.sun.xiaotian.chatroom;
+package com.sun.xiaotian.chatroom.server;
 
+import com.sun.xiaotian.chatroom.SendDataRecord;
+import com.sun.xiaotian.chatroom.TypeInfo;
 import com.sun.xiaotian.chatroom.data.ChannelDataReader;
 import com.sun.xiaotian.chatroom.data.ChannelDataWriter;
 import com.sun.xiaotian.chatroom.data.ClientSendData;
@@ -21,6 +23,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 
 public class Server extends Thread {
@@ -55,6 +58,9 @@ public class Server extends Thread {
                 if (acceptSocket == null) {
                     continue;
                 }
+                while (!acceptSocket.finishConnect()) {
+                    TimeUnit.MICROSECONDS.sleep(100);
+                }
                 ClientSendData clientSendData = channelDataReader.readFromClientSocket(acceptSocket);
                 if (clientSendData.getClientType() == TypeInfo.CLIENT_READ) {
                     long clientId = clientSendData.getClientId();
@@ -77,7 +83,9 @@ public class Server extends Thread {
         } catch (ChatRoomException e) {
             logger.info(e.getMessage(), e);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            logger.error(e.getMessage(), e);
         }
     }
 
