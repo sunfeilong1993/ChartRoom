@@ -44,7 +44,7 @@ public class DataReadHelper {
     public Message readMessage(SocketChannel channel, int size) throws IOException {
         Message message;
 
-        logger.info("readBuffer:\t" + size);
+        logger.debug("readBuffer:\t" + size);
 
         ByteBuffer readBuffer = ByteBuffer.allocate(size);
 

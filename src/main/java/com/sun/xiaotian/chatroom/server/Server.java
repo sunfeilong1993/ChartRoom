@@ -10,14 +10,11 @@ import com.sun.xiaotian.chatroom.exception.ChatRoomException;
 import com.sun.xiaotian.chatroom.message.Message;
 import com.sun.xiaotian.chatroom.storage.DataStorage;
 import com.sun.xiaotian.chatroom.storage.MemoryDataStorage;
-import com.sun.xiaotian.chatroom.util.JsonMessageParse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.Channel;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Date;
@@ -81,59 +78,11 @@ public class Server extends Thread {
                 acceptSocket.close();
             }
         } catch (ChatRoomException e) {
-            logger.info(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
         }
     }
-
-    class ReadThread extends Thread {
-
-        private SocketChannel channel;
-
-        public ReadThread(SocketChannel channel) {
-            this.channel = channel;
-        }
-
-        @Override
-        public void run() {
-            try {
-                ByteBuffer readBuffer = ByteBuffer.allocate(8);
-                channel.read(readBuffer);
-                while (readBuffer.position() < 8) {
-                    channel.read(readBuffer);
-                }
-
-                int readLength = channel.read(readBuffer);
-                while (readLength != -1) {
-                    readLength = channel.read(readBuffer);
-                }
-                readBuffer.flip();
-                Message message = JsonMessageParse.readFromJson(new String(readBuffer.array(), 0, readBuffer.limit()));
-                message.setAcceptTime(new Date());
-                dataStorage.add(message);
-                logger.info(message.toString());
-                readBuffer.clear();
-            } catch (IOException e) {
-
-            }
-        }
-    }
-
-    class WriteThread extends Thread {
-
-        private Channel channel;
-
-        public WriteThread(Channel channel) {
-            this.channel = channel;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-        }
-    }
-
 }

@@ -3,15 +3,12 @@ package com.sun.xiaotian.chatroom.client;
 import com.sun.xiaotian.chatroom.TypeInfo;
 import com.sun.xiaotian.chatroom.data.ChannelDataWriter;
 import com.sun.xiaotian.chatroom.data.ClientSendData;
-import com.sun.xiaotian.chatroom.data.DataWriteHelper;
 import com.sun.xiaotian.chatroom.message.TextMessage;
-import com.sun.xiaotian.chatroom.util.JsonMessageParse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Date;
 import java.util.Random;
@@ -40,7 +37,7 @@ public class WriteClient extends Client {
                 }
                 writeMessage(clientSocket, "write");
                 clientSocket.close();
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.SECONDS.sleep(random.nextInt(10));
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -56,6 +53,6 @@ public class WriteClient extends Client {
         clientSendData.setClientId(id);
         clientSendData.setMessage(new TextMessage(id, new Date(), null, random.nextInt() + context));
         channelDataWriter.writeToClientSocket(channel, clientSendData);
-        logger.info(clientSendData.getMessage().toString());
+        logger.info("writeData:\t" + clientSendData.getMessage().toString());
     }
 }

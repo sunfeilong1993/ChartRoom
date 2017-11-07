@@ -43,7 +43,7 @@ public class ReadClient extends Client {
 
                 writeClientInfo(clientSocket);
                 readMessage(clientSocket);
-                TimeUnit.SECONDS.sleep(random.nextInt(3));
+                TimeUnit.SECONDS.sleep(random.nextInt(10));
                 clientSocket.close();
             }
         } catch (IOException e) {
