@@ -32,7 +32,6 @@ public class MessageParseTest {
         Message message = messages.get(0);
         String json = JsonMessageParse.writeToJson(message);
         Message message1 = JsonMessageParse.readFromJson(json);
-        logger.info(json);
         assertTrue(message.equals(message1));
     }
 
@@ -41,10 +40,9 @@ public class MessageParseTest {
     public void 测试列表序列化和反序列化() throws Exception {
         String json = JsonMessageParse.writeToListJson(messages);
         List<Message> result = JsonMessageParse.readFromListJson(json);
-        logger.info(json);
         assertTrue(messages.get(0).equals(result.get(0)));
-        assertTrue(messages.get(0).equals(result.get(0)));
-        assertTrue(messages.get(0).equals(result.get(0)));
+        assertTrue(messages.get(1).equals(result.get(1)));
+        assertTrue(messages.get(2).equals(result.get(2)));
     }
 
 }
