@@ -54,7 +54,7 @@ public class ReadClient extends Client {
     private void writeClientInfo(SocketChannel channel) {
         ClientSendData clientSendData = new ClientSendData();
         clientSendData.setClientId(id);
-        clientSendData.setClientType(TypeInfo.CLIENT_READ);
+        clientSendData.setClientType(TypeInfo.CLIENT_ACCEPT);
         clientSendData.setMessage(TextMessage.NULL);
         channelDataWriter.writeToClientSocket(channel, clientSendData);
     }

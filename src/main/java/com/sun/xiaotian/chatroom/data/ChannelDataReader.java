@@ -19,7 +19,7 @@ public class ChannelDataReader {
             int clientType = dataReadHelper.readInt(channel);
             if (clientType == -1) {
                 logger.info("No Data ...");
-                return clientSendData;
+                return ClientSendData.NULL;
             }
             clientSendData.setClientType(clientType);
 

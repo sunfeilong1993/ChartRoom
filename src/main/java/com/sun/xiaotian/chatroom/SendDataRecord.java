@@ -12,7 +12,7 @@ public class SendDataRecord {
 
     private final static Map<Long, ClientRecord> recordsMap = new ConcurrentHashMap<>();
 
-    public void add(Long clientId, int index, Date acceptDate) {
+    public void addOrUpdate(Long clientId, int index, Date acceptDate) {
         recordsMap.put(clientId, new ClientRecord(clientId, index, acceptDate));
     }
 

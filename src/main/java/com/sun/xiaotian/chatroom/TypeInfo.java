@@ -1,6 +1,12 @@
 package com.sun.xiaotian.chatroom;
 
 public class TypeInfo {
-    public final static int CLIENT_READ = 1;
-    public final static int CLIENT_WRITE = 2;
+    /**
+     * 从服务器接收信息
+     */
+    public final static int CLIENT_ACCEPT = 1;
+    /**
+     * 向服务器发送信息
+     */
+    public final static int CLIENT_SEND = 2;
 }

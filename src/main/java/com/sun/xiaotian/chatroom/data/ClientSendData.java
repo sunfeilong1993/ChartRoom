@@ -4,6 +4,8 @@ import com.sun.xiaotian.chatroom.message.Message;
 
 public class ClientSendData {
 
+    public final static ClientSendData NULL = new ClientSendData();
+
     protected int clientType;
 
     protected long clientId;

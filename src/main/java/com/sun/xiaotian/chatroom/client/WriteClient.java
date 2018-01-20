@@ -11,16 +11,20 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.Date;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import java.util.Scanner;
 
 public class WriteClient extends Client {
 
     private final static Logger logger = LogManager.getLogger(WriteClient.class);
 
+    /**
+     * 输入quit结束客户端
+     */
+    private final String QUIT = "quit";
+
     private ChannelDataWriter channelDataWriter = new ChannelDataWriter();
 
-    private final Random random = new Random(37);
+    private final Scanner scanner = new Scanner(System.in);
 
     public WriteClient(String host, int port) {
         super("write", host, port);
@@ -29,29 +33,28 @@ public class WriteClient extends Client {
     @Override
     public void execute() {
         try {
+            SocketChannel clientSocket = SocketChannel.open(new InetSocketAddress(host, port));
+
             while (true) {
-                SocketChannel clientSocket = SocketChannel.open();
-                clientSocket.connect(new InetSocketAddress(host, port));
-                while (!clientSocket.finishConnect()) {
-                    TimeUnit.MICROSECONDS.sleep(100);
+                //读取下一行
+                String message = scanner.nextLine();
+                if (QUIT.equalsIgnoreCase(message)) {
+                    break;
+                } else {
+                    writeMessage(clientSocket, message);
                 }
-                writeMessage(clientSocket, "write");
-                clientSocket.close();
-                TimeUnit.SECONDS.sleep(random.nextInt(10));
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
-    public void writeMessage(SocketChannel channel, String context) throws IOException, InterruptedException {
+    private void writeMessage(SocketChannel channel, String context) throws IOException {
         //发送消息
         ClientSendData clientSendData = new ClientSendData();
-        clientSendData.setClientType(TypeInfo.CLIENT_WRITE);
+        clientSendData.setClientType(TypeInfo.CLIENT_SEND);
         clientSendData.setClientId(id);
-        clientSendData.setMessage(new TextMessage(id, new Date(), null, random.nextInt(1000) + context));
+        clientSendData.setMessage(new TextMessage(id, new Date(), null, context));
         channelDataWriter.writeToClientSocket(channel, clientSendData);
         logger.info("writeData:\t" + clientSendData.getMessage().toString());
     }
