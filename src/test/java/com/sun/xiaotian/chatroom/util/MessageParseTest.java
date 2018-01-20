@@ -4,8 +4,8 @@ import com.sun.xiaotian.chatroom.message.Message;
 import com.sun.xiaotian.chatroom.message.TextMessage;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 public class MessageParseTest {
 
-    private final static Logger logger = LoggerFactory.getLogger(MessageParseTest.class);
+    private final static Logger logger = LogManager.getLogger(MessageParseTest.class);
 
     List<Message> messages;
 

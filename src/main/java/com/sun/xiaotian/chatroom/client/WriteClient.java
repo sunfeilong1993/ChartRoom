@@ -4,8 +4,8 @@ import com.sun.xiaotian.chatroom.TypeInfo;
 import com.sun.xiaotian.chatroom.data.ChannelDataWriter;
 import com.sun.xiaotian.chatroom.data.ClientSendData;
 import com.sun.xiaotian.chatroom.message.TextMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 public class WriteClient extends Client {
 
-    private final static Logger logger = LoggerFactory.getLogger(WriteClient.class);
+    private final static Logger logger = LogManager.getLogger(WriteClient.class);
 
     private ChannelDataWriter channelDataWriter = new ChannelDataWriter();
 

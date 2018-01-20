@@ -2,14 +2,14 @@ package com.sun.xiaotian.chatroom.data;
 
 import com.sun.xiaotian.chatroom.exception.ChatRoomException;
 import com.sun.xiaotian.chatroom.message.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 
 public class ChannelDataReader {
-    private final static Logger logger = LoggerFactory.getLogger(ChannelDataReader.class);
+    private final static Logger logger = LogManager.getLogger(ChannelDataReader.class);
 
     private final static DataReadHelper dataReadHelper = new DataReadHelper();
 

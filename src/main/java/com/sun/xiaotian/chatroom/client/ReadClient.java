@@ -7,8 +7,8 @@ import com.sun.xiaotian.chatroom.data.ClientSendData;
 import com.sun.xiaotian.chatroom.data.ServerSendData;
 import com.sun.xiaotian.chatroom.message.Message;
 import com.sun.xiaotian.chatroom.message.TextMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -22,7 +22,7 @@ public class ReadClient extends Client {
     private ChannelDataReader channelDataReader = new ChannelDataReader();
     private ChannelDataWriter channelDataWriter = new ChannelDataWriter();
 
-    private final static Logger logger = LoggerFactory.getLogger(ReadClient.class);
+    private final static Logger logger = LogManager.getLogger(ReadClient.class);
 
     public ReadClient(String host, int port) {
         super("read", host, port);

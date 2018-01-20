@@ -10,8 +10,8 @@ import com.sun.xiaotian.chatroom.exception.ChatRoomException;
 import com.sun.xiaotian.chatroom.message.Message;
 import com.sun.xiaotian.chatroom.storage.DataStorage;
 import com.sun.xiaotian.chatroom.storage.MemoryDataStorage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -34,7 +34,7 @@ public class ChatServer extends Thread {
     private final ChannelDataReader channelDataReader = new ChannelDataReader();
     private final ChannelDataWriter channelDataWriter = new ChannelDataWriter();
 
-    private final static Logger logger = LoggerFactory.getLogger(ChatServer.class);
+    private final static Logger logger = LogManager.getLogger(ChatServer.class);
 
     private DataStorage dataStorage;
     private SendDataRecord sendDataRecord;
