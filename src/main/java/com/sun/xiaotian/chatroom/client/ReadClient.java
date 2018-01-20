@@ -30,26 +30,23 @@ public class ReadClient extends Client {
 
     @Override
     public void execute() {
-        try {
-            Random random = new Random(37);
-            while (true) {
-                SocketChannel clientSocket = SocketChannel.open();
+        Random random = new Random(37);
+        while (true) {
+            try (SocketChannel clientSocket = SocketChannel.open(new InetSocketAddress(host, port))) {
                 clientSocket.configureBlocking(false);
-                clientSocket.connect(new InetSocketAddress(host, port));
-
-                while (!clientSocket.finishConnect()) {
-                    TimeUnit.MICROSECONDS.sleep(100);
-                }
-
+                //发送信息，表明身份
                 writeClientInfo(clientSocket);
-                readMessage(clientSocket);
-                TimeUnit.SECONDS.sleep(random.nextInt(10));
-                clientSocket.close();
+                //读取信息
+                while (true) {
+                    readMessage(clientSocket);
+                    TimeUnit.SECONDS.sleep(5);
+                }
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
         }
     }
+
 
     private void writeClientInfo(SocketChannel channel) {
         ClientSendData clientSendData = new ClientSendData();

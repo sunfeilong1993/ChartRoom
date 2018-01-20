@@ -15,11 +15,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.channels.*;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 聊天服务器
@@ -63,7 +65,7 @@ public class ChatServer extends Thread {
             new Thread(() -> {
                 while (true) {
                     try {
-                        selector.select();
+                        selector.select(1000);
                         Set<SelectionKey> selectionKeys = selector.selectedKeys();
                         Iterator<SelectionKey> keyIterator = selectionKeys.iterator();
                         while (keyIterator.hasNext()) {
@@ -74,13 +76,15 @@ public class ChatServer extends Thread {
                                 SocketChannel client = channel.accept();
                                 client.configureBlocking(false);
                                 client.register(selector, SelectionKey.OP_READ, true);
-                            }
-                            if (nextKey.isReadable()) {
+                            } else if (nextKey.isReadable()) {
                                 boolean first = (boolean) nextKey.attachment();
                                 if (!first) {
                                     break;
+                                } else {
+                                    nextKey.attach(false);
                                 }
                                 SocketChannel client = (SocketChannel) nextKey.channel();
+                                //todo 阻塞
                                 //读取信息判断客户端类型
                                 ClientSendData clientSendData = channelDataReader.readFromClientSocket(client);
                                 if (clientSendData.getClientType() == TypeInfo.CLIENT_ACCEPT) {
@@ -92,7 +96,6 @@ public class ChatServer extends Thread {
                                 } else {
                                     throw new ChatRoomException("不支持的客户端类型");
                                 }
-                                nextKey.attach(false);
                             }
                         }
                     } catch (IOException e) {
@@ -120,10 +123,10 @@ public class ChatServer extends Thread {
                                     serverSendData.add(dataStorage.getByIndex(index));
                                     index++;
                                 }
-                                if(serverSendData.getMessages().size() == 0){
+                                if (serverSendData.getMessages().size() == 0) {
                                     break;
                                 }
-                                sendDataRecord.addOrUpdate(clientSendData.getClientId(), index - 1, dataStorage.getByIndex(index - 1).getAcceptTime());
+                                sendDataRecord.addOrUpdate(clientSendData.getClientId(), index, dataStorage.getByIndex(index - 1).getAcceptTime());
                                 channelDataWriter.writeToServerSocket(accept_client, serverSendData);
                             }
                         }
@@ -146,7 +149,10 @@ public class ChatServer extends Thread {
                                 ClientSendData clientSendData = (ClientSendData) next.attachment();
                                 if (clientSendData == null) {
                                     SocketChannel client = ((SocketChannel) next.channel());
+                                    // todo 阻塞
                                     clientSendData = channelDataReader.readFromClientSocket(client);
+                                } else {
+                                    next.attach(null);
                                 }
                                 if (clientSendData == ClientSendData.NULL) {
                                     break;
@@ -154,7 +160,6 @@ public class ChatServer extends Thread {
                                 Message message = clientSendData.getMessage();
                                 message.setAcceptTime(new Date());
                                 dataStorage.add(message);
-                                next.attach(null);
                             }
                         }
                     } catch (IOException e) {
@@ -162,34 +167,6 @@ public class ChatServer extends Thread {
                     }
                 }
             }).start();
-
-//            while (true) {
-//                SocketChannel acceptSocket = server.accept();
-//                if (acceptSocket == null) {
-//                    continue;
-//                }
-//                while (!acceptSocket.finishConnect()) {
-//                    TimeUnit.MICROSECONDS.sleep(100);
-//                }
-//                ClientSendData clientSendData = channelDataReader.readFromClientSocket(acceptSocket);
-//                if (clientSendData.getClientType() == TypeInfo.CLIENT_ACCEPT) {
-//                    long clientId = clientSendData.getClientId();
-//                    int index = sendDataRecord.getIndex(clientId);
-//                    ServerSendData serverSendData = new ServerSendData();
-//                    while (dataStorage.messageCount() > 0 && index < dataStorage.messageCount()) {
-//                        serverSendData.add(dataStorage.getByIndex(index));
-//                        index++;
-//                    }
-//                    channelDataWriter.writeToServerSocket(acceptSocket, serverSendData);
-//                } else if (clientSendData.getClientType() == TypeInfo.CLIENT_SEND) {
-//                    Message message = clientSendData.getMessage();
-//                    message.setAcceptTime(new Date());
-//                    dataStorage.add(message);
-//                } else {
-//                    throw new ChatRoomException("不支持的客户端类型");
-//                }
-//                acceptSocket.close();
-//            }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
