@@ -46,9 +46,7 @@ public class ReadClient extends Client {
                 TimeUnit.SECONDS.sleep(random.nextInt(10));
                 clientSocket.close();
             }
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }

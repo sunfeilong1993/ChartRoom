@@ -11,12 +11,8 @@
     </appender>
 
 
-    <logger name="org.quartz">
-        <level value="info" />
-    </logger>
-
     <root>
-        <level value="debugger" />
+        <level value="info" />
         <appender-ref ref="default" />
     </root>
 

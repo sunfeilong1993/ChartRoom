@@ -51,7 +51,7 @@ public class WriteClient extends Client {
         ClientSendData clientSendData = new ClientSendData();
         clientSendData.setClientType(TypeInfo.CLIENT_WRITE);
         clientSendData.setClientId(id);
-        clientSendData.setMessage(new TextMessage(id, new Date(), null, random.nextInt() + context));
+        clientSendData.setMessage(new TextMessage(id, new Date(), null, random.nextInt(1000) + context));
         channelDataWriter.writeToClientSocket(channel, clientSendData);
         logger.info("writeData:\t" + clientSendData.getMessage().toString());
     }

@@ -15,31 +15,34 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Date;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 聊天服务器
+ */
+public class ChatServer extends Thread {
 
-public class Server extends Thread {
+    /**
+     * 服务器端口，默认是 8383
+     */
+    private int port = 8383;
 
-    private int port = 0;
+    private final ChannelDataReader channelDataReader = new ChannelDataReader();
+    private final ChannelDataWriter channelDataWriter = new ChannelDataWriter();
 
-    private ExecutorService readThreads = Executors.newFixedThreadPool(10);
-    private ExecutorService writeThreadsThreads = Executors.newFixedThreadPool(10);
-
-    private ChannelDataReader channelDataReader = new ChannelDataReader();
-    private ChannelDataWriter channelDataWriter = new ChannelDataWriter();
-
-    private final static Logger logger = LoggerFactory.getLogger(Server.class);
+    private final static Logger logger = LoggerFactory.getLogger(ChatServer.class);
 
     private DataStorage dataStorage;
     private SendDataRecord sendDataRecord;
 
-    public Server(int port) {
-        this.port = port;
+    public ChatServer(int port) {
+        if (port > 0) {
+            this.port = port;
+        }
         dataStorage = new MemoryDataStorage();
         sendDataRecord = new SendDataRecord();
     }
@@ -47,8 +50,11 @@ public class Server extends Thread {
     public void run() {
         try {
             ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-            serverSocketChannel.socket().bind(new InetSocketAddress(9999));
+            serverSocketChannel.socket().bind(new InetSocketAddress(port));
             serverSocketChannel.configureBlocking(false);
+
+            Selector selector = Selector.open();
+            Selector sendSelector = Selector.open();
 
             while (true) {
                 SocketChannel acceptSocket = serverSocketChannel.accept();

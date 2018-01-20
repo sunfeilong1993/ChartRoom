@@ -20,7 +20,6 @@ public class TextMessage extends Message {
         this.data = data;
     }
 
-
     @Override
     public String toString() {
         return "TextMessage{" +
